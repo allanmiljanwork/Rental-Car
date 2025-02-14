@@ -32,6 +32,22 @@ To solve the task, proceed as follows:
 
 - The minimum rental price per day is equivalent to the age of the driver.
 
+
+## TDD Tunniülesanne
+* Tänase tunni ülesandeks on paarisprogrammeerimine ja TDD.
+* Palun jagunege paaridesse ja võtke üks versioon Car Rental refaktoreeritud ja testitud koodist
+* Lisage uus funktsionaalsus kasutades TDD-d:
+  
+* Weekday/Weekend Pricing:
+
+    * Write tests to ensure that pricing is different for weekdays and weekends. Write tests to verify correctly determined price based on the rental period.
+    * Implement functionality to have different pricing for weekdays and weekends. Weekdays have regular price and weekend days have 5% price increase.
+    * Example 1: 50 year old driver rents a car for three days: Monday, Tuesday, Wednesday - Total price $150
+    * Example 2: 50 year old driver rents a car for three days: Thursday, Friday, Saturday - Total price $152.50
+* Töö jaotus: 
+   * Üks partneritest kirjutab testi. 
+   * Teine kirjutab koodi, et test läbi läheks.
+
 # New business requirements (to be implemented)
 
 - Individuals holding a driver's license for less than a year are ineligible to rent. 
