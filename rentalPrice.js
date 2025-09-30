@@ -13,7 +13,7 @@ function price(pickupDate, dropoffDate, carType, driverAge,) {
         return "Driver too young - cannot quote the price";
     }
 
-    if (isAgeRestricted(age, carType)) {
+    if (isAgeRestricted(driverAge, carType)) {
         return "Drivers 21 y/o or less can only rent Compact vehicles";
     }
 
@@ -27,23 +27,23 @@ function price(pickupDate, dropoffDate, carType, driverAge,) {
         return driverAge * rentalDays;
     }
 
-    function applySurcharges(basePrice, driverAge, carType, rentalDays, highSeason) {
-        let finalPrice = basePrice;
+   function applySurcharges(basePrice, driverAge, carType, rentalDays, highSeason) {
+    let finalPrice = basePrice;
 
-        if (ageUnder25(driverAge, carType) && highSeason) {
-            finalPrice = basePrice * 1.5;
-        }
-
-        if (highSeason) {
-            finalPrice = basePrice * 1.15;
-        }
-
-        if (longRentDay(rentalDays) && !highSeason) {
-            finalPrice = basePrice * 0.9;
-        }
-        return finalPrice;
-
+    if (ageUnder25(driverAge, carType) && highSeason) {
+        finalPrice *= 1.5;
     }
+
+    if (highSeason) {
+        finalPrice *= 1.15;
+    }
+
+    if (longRentDay(rentalDays) && !highSeason) {
+        finalPrice *= 0.9;
+    }
+
+    return finalPrice;
+}
 
 function getRentalDays(pickupDate, dropoffDate) {
     const start = new Date(pickupDate);
@@ -90,3 +90,7 @@ function formatPrice(finalPrice) {
 }
 
 exports.price = price;
+exports.isAgeRestricted = isAgeRestricted;
+exports.isTooYoung = isTooYoung;
+exports.ageUnder25 = ageUnder25;
+exports.longRentDay = longRentDay;
