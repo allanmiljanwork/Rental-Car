@@ -1,65 +1,92 @@
-const selectCar = new Set(["Compact", "Electric", "Cabrio", "Racer"]);
+// const VALID_CAR_TYPES = new Set(["Compact", "Electric", "Cabrio", "Racer"]);
+//const carType = getCarType(carTypeInput);
 
-function getCar(type) {
-  return selectCar.has(type) ? type : "Unknown";
+const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
+const MONTH_NO_APRIL = 3;
+const MONTH_NO_OCTOBER = 9;
+
+function price(pickupDate, dropoffDate, carType, driverAge,) {
+    const rentalDays = getRentalDays(pickupDate, dropoffDate);
+    const highSeason = isHighSeason(pickupDate, dropoffDate);
+
+    if (isTooYoung(driverAge)) {
+        return "Driver too young - cannot quote the price";
+    }
+
+    if (isAgeRestricted(age, carType)) {
+        return "Drivers 21 y/o or less can only rent Compact vehicles";
+    }
+
+    let basePrice = calculateBasePrice(driverAge, rentalDays);
+
+    let finalPrice = applySurcharges(basePrice, {basePrice, driverAge, carType, rentalDays, highSeason});
+
+    return formatPrice(finalPrice);
+}
+    function calculateBasePrice(driverAge, rentalDays) {
+        return driverAge * rentalDays;
+    }
+
+    function applySurcharges(basePrice, driverAge, carType, rentalDays, highSeason) {
+        let finalPrice = basePrice;
+
+        if (ageUnder25(driverAge, carType) && highSeason) {
+            finalPrice = basePrice * 1.5;
+        }
+
+        if (highSeason) {
+            finalPrice = basePrice * 1.15;
+        }
+
+        if (longRentDay(rentalDays) && !highSeason) {
+            finalPrice = basePrice * 0.9;
+        }
+        return finalPrice;
+
+    }
+
+function getRentalDays(pickupDate, dropoffDate) {
+    const start = new Date(pickupDate);
+    const end = new Date(dropoffDate);
+
+    return Math.round(Math.abs((end - start) / DAY_IN_MILLISECONDS)) + 1;
 }
 
-function getDate(pickupDate, dropoffDate) {
-  const oneDay = 24 * 60 * 60 * 1000;
-  const firstDate = new Date(pickupDate);
-  const secondDate = new Date(dropoffDate);
-  return Math.round(Math.abs((firstDate - secondDate) / oneDay)) + 1;
+function isHighSeason(pickupDate, dropoffDate) {
+    const startMonth = new Date(pickupDate).getMonth();
+    const endMonth = new Date(dropoffDate).getMonth();
+
+    if (
+        (startMonth >= MONTH_NO_APRIL && startMonth <= MONTH_NO_OCTOBER) ||
+        (endMonth >= MONTH_NO_APRIL && endMonth <= MONTH_NO_OCTOBER) ||
+        (startMonth < MONTH_NO_APRIL && endMonth > MONTH_NO_OCTOBER)) {
+            return true;
+        }
 }
 
-function getSeason(pickupDate, dropoffDate) {
-  const pickupMonth = new Date(pickupDate).getMonth();
-  const dropoffMonth = new Date(dropoffDate).getMonth();
-  const highStart = 3; 
-  const highEnd = 9;   
 
-  if (
-    (pickupMonth >= highStart && pickupMonth <= highEnd) ||
-    (dropoffMonth >= highStart && dropoffMonth <= highEnd) ||
-    (pickupMonth < highStart && dropoffMonth > highEnd)
-  ) {
-    return "High";
-  } else {
-    return "Low";
-  }
+
+
+function isTooYoung(driverAge) {
+    return driverAge < 18;
 }
 
-function price(pickupDate, dropoffDate, type, age) {
-  const carType = getCar(type);
-  const days = getDate(pickupDate, dropoffDate);
-  const season = getSeason(pickupDate, dropoffDate);
+function isAgeRestricted(driverAge, carType) {
+    return driverAge <= 21 && carType !== "Compact";
+}
 
-  if (age < 18) return "Driver too young - cannot quote the price";
+function ageUnder25(driverAge, carType) {
+    return driverAge <= 25 && carType === "Racer";
+}
 
-  if (licenseYears < 1) return "Driver license must be held for at least 1 year";
+function longRentDay(rentalDays) {
+    return rentalDays > 10;
+}
 
-  if (age <= 21 && carType !== "Compact") 
-    return "Drivers 21 y/o or less can only rent Compact vehicles";
 
-  let dailyPrice = Math.max(age, 1); 
-  let totalPrice = dailyPrice * days;
 
-  if (carType === "Racer" && age <= 25 && season === "High") {
-    totalPrice *= 1.5;
-  }
-
-  if (season === "High") {
-    totalPrice *= 1.15;
-    
-    if (licenseYears < 3) totalPrice += 15 * days;
-  }
-
-  if (licenseYears < 2) totalPrice *= 1.3;
-
-  if (days > 10 && season === "Low") {
-    totalPrice *= 0.9;
-  }
-
-  return `$${totalPrice.toFixed(2)}`;
+function formatPrice(finalPrice) {
+    return 'Price: $' + finalPrice.toFixed(2);
 }
 
 exports.price = price;
