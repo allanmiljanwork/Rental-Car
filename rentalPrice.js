@@ -21,7 +21,7 @@ const LICENSE_REQUIREMENTS = {
 const PRICING = {
   HIGH_SEASON_MULTIPLIER: 1.15,
   LONG_RENTAL_DISCOUNT: 0.9,
-  RACER_LOW_SEASON_MULTIPLIER: 1.5,
+  RACER_HIGH_SEASON_MULTIPLIER: 1.5,
   NEW_LICENSE_MULTIPLIER: 1.3,
   NEW_LICENSE_DAILY_FEE: 15,
   LONG_RENTAL_DAYS: 10,
@@ -70,7 +70,7 @@ function validateRental(age, licenseYears, carType) {
     return "Individuals holding a driver's license for less than a year are ineligible to rent.";
   }
 
-  if (age >= AGE_LIMIT.MINIMUM && age <= AGE_LIMIT.COMPACT_ONLY && carType == CAR_TYPES.COMPACT) {
+  if (age >= AGE_LIMIT.MINIMUM && age <= AGE_LIMIT.COMPACT_ONLY && carType !== CAR_TYPE.COMPACT) {
     return "Drivers 21 y/o or less can only rent Compact vehicles.";
   }
 
@@ -83,7 +83,7 @@ function calculateBasePrice(age, days) {
 
 function applyRacerSurcharge(price, carType, age, isHighSeason) {
   if (carType === CAR_TYPE.RACER && age <= AGE_LIMIT.RACER_SURCHARGE && isHighSeason) {
-    return price * PRICING.RACER_LOW_SEASON_MULTIPLIER;
+    return price * PRICING.RACER_HIGH_SEASON_MULTIPLIER;
   }
   return price;
 }
@@ -117,7 +117,7 @@ function applyNewLicenseSeasonalFee(price, licenseYears, days, isHighSeason) {
 }
 
 function price(pickupDate, dropoffDate, type, age, licenseYear) {
-  const carType = getCarType(type);
+  const carType = type;
   const days = calculateDays(pickupDate, dropoffDate);
   const highSeason = isHighSeason(pickupDate, dropoffDate);
   const licenseYears = calculateLicenseYears(licenseYear);
