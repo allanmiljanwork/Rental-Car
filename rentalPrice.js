@@ -33,10 +33,6 @@ const SEASON = {
   HIGH_SEASON_END_MONTH: 9    // Oktoober
 };
 
-function getCarType(type) {
-  return CAR_TYPE[type] || "Unknown";
-}
-
 function calculateDays(pickupDate, dropoffDate) {
   const pickup = new Date(pickupDate);
   const dropoff = new Date(dropoffDate);
@@ -61,7 +57,7 @@ function isHighSeason(pickupDate, dropoffDate) {
 function calculateLicenseYears(licenseYear) {
   return new Date().getFullYear() - licenseYear;
 }
-function validateRental(age, licenseYears, carType) {
+function validateRental(age, licenseYears, carType,) {
   if (age < AGE_LIMIT.MINIMUM) {
     return "Driver too young - cannot quote the price";
   }
@@ -73,7 +69,7 @@ function validateRental(age, licenseYears, carType) {
   if (age >= AGE_LIMIT.MINIMUM && age <= AGE_LIMIT.COMPACT_ONLY && carType !== CAR_TYPE.COMPACT) {
     return "Drivers 21 y/o or less can only rent Compact vehicles.";
   }
-
+  
   return null;
 }
 
