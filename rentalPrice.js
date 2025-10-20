@@ -83,7 +83,7 @@ function calculateBasePrice(age, days) {
 
 function applyRacerSurcharge(price, carType, age, isHighSeason) {
   if (carType === CAR_TYPE.RACER && age <= AGE_LIMIT.RACER_SURCHARGE && isHighSeason) {
-    return price * PRICING.RACER_LOW_SEASON_MULTIPLIER;
+    return price * PRICING.RACER_HIGH_SEASON_MULTIPLIER;
   }
   return price;
 }
