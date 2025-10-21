@@ -77,7 +77,7 @@ function validateRental(age, licenseYears, carType) {
 	return null;
 }
 
-function countWeekendDays(pickupDate, dropoffDate) {
+function checkIfWeekend(pickupDate, dropoffDate) {
 	const pickup = new Date(pickupDate);
 	const dropoff = new Date(dropoffDate);
 	let weekendDays = 0;
@@ -95,7 +95,7 @@ function countWeekendDays(pickupDate, dropoffDate) {
 
 
 function applyWeekendPricing(age, pickupDate, dropoffDate, totalDays) {
-	const weekendDays = countWeekendDays(pickupDate, dropoffDate);
+	const weekendDays = checkIfWeekend(pickupDate, dropoffDate);
 	const weekdayDays = totalDays - weekendDays;
 
 	const weekdayPrice = age * weekdayDays;
@@ -155,12 +155,7 @@ function price(pickupDate, dropoffDate, type, age, licenseYear) {
 	let rentalPrice = applyWeekendPricing(age, pickupDate, dropoffDate, days);
 	rentalPrice = applyNewLicenseSurcharge(rentalPrice, licenseYears);
 	rentalPrice = applySeasonalPricing(rentalPrice, highSeason);
-	rentalPrice = applyNewLicenseSeasonalFee(
-		rentalPrice,
-		licenseYears,
-		days,
-		highSeason
-	);
+	rentalPrice = applyNewLicenseSeasonalFee(rentalPrice, licenseYears, days, highSeason);
 	rentalPrice = applyRacerSurcharge(rentalPrice, carType, age, highSeason);
 	rentalPrice = applyLongRentalDiscount(rentalPrice, days, highSeason);
 

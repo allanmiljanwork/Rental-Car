@@ -127,12 +127,7 @@ function price(pickupDate, dropoffDate, type, age, licenseYear) {
 
 	rentalPrice = applyNewLicenseSurcharge(rentalPrice, licenseYears);
 	rentalPrice = applySeasonalPricing(rentalPrice, highSeason);
-	rentalPrice = applyNewLicenseSeasonalFee(
-		rentalPrice,
-		licenseYears,
-		days,
-		highSeason
-	);
+	rentalPrice = applyNewLicenseSeasonalFee(rentalPrice, licenseYears, days, highSeason);
 	rentalPrice = applyRacerSurcharge(rentalPrice, carType, age, highSeason);
 	rentalPrice = applyLongRentalDiscount(rentalPrice, days, highSeason);
 
