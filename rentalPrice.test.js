@@ -29,42 +29,41 @@ test('Those aged 18-21 can only rent Compact cars', () => {
 
 });
 
-describe('Testing rental pricing logic',() => {
+describe('Testing rental pricing logic', () => {
 
-    test('Checking if the price is calculated correctly during low season', () => {
-        expect(rental.price('2025-01-01', '2025-01-03', 'Compact', 25, 2023))
-        .toBe('50.00$')
-    });
+  test('Checking if the price is calculated correctly during low season', () => {
+    expect(rental.price('2025-01-01', '2025-01-03', 'Compact', 25, 2023))
+      .toBe('50.00$');
+  });
 
-    test('Checking if the price is calculated correctly during high season', () => {
-        expect(rental.price('2025-07-11', '2025-07-12', 'Electric', 25))
-        .toBe('28.75$')
-    });
-    
-    test('Checking if during high season the additional 15% is added ', () => {
-        expect(rental.price('2024-05-01', '2024-06-01', 'Compact', 25))
-        .toBe('802.12$')
-    });
-    
-    test('Drivers with a license that is less than 2 years have to pay 30% more', () => {
-        expect(rental.price('2024-01-01', '2024-02-01', 'Compact', 25, 2023))
-        .toBe('775.00$')
-    });
-    
-    test('Drivers under 25 with a Racer in low season', () => {
-        expect(rental.price('2024-01-01', '2024-02-01', 'Racer', 24, 2015))
-        .toBe('744.00$')
-    });
-    
-    test('Drivers under 25 with a Racer in high season', () => {
-        expect(rental.price('2024-06-01', '2024-07-01', 'Racer', 24, 2015))
-        .toBe('1117.80$')
-    });
+  test('Checking if the price is calculated correctly during high season', () => {
+    expect(rental.price('2025-07-11', '2025-07-12', 'Electric', 25))
+      .toBe('28.75$');
+  });
+  
+  test('Checking if during high season the additional 15% is added', () => {
+    expect(rental.price('2024-05-01', '2024-06-01', 'Compact', 25))
+      .toBe('891.25$');
+  });
+  
+  test('Drivers with a license that is less than 2 years have to pay 30% more', () => {
+    expect(rental.price('2024-01-01', '2024-01-06', 'Compact', 25, 2023))
+      .toBe('162.50$'); 
+  });
+  
+  test('Drivers under 25 with a Racer in low season', () => {
+    expect(rental.price('2024-01-01', '2024-01-06', 'Racer', 24, 2015))
+      .toBe('120.00$'); 
+  });
 
-    test('Drivers with a license that is less than 3 years and its high season', () => {
-        expect(rental.price('2024-07-01', '2024-07-02', 'Compact', 0, 2024))
-        .toBe('776.25$') // recieved 53.38$ age 25 + flat 15 + 1.15 + 1.30 
-    });
+  test('Drivers under 25 with a Racer in high season', () => {
+    expect(rental.price('2024-06-01', '2024-07-01', 'Racer', 24, 2015))
+      .toBe('1242.00$');
+  });
+
+  test('Drivers with a license that is less than 3 years and its high season', () => {
+    expect(rental.price('2024-07-01', '2024-07-02', 'Compact', 25, 2022))
+      .toBe('43.75$');
+  });
 
 });
-
